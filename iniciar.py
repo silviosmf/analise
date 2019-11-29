@@ -124,8 +124,8 @@ def testeOpenCSV():
                 print(coluna)
             
 def openAnalistaCSV():
-    #busca os caminhos dos arquivos que serão coletados
-    arquivos = listarArquivos('teste/analistas')
+    #busca os caminhos dos arquivos que serão coletados dentro da pasta passado no parâmetro
+    arquivos = listarArquivos('dados')
     for caminhoArquivo in arquivos:
         data = caminhoArquivo[-12:-10]+"/"+caminhoArquivo[-10:-8]+"/"+caminhoArquivo[-8:-4]
         ficheiro = open(caminhoArquivo, 'r')
@@ -158,6 +158,7 @@ iniciar = Flask(__name__, static_url_path='/')
 @iniciar.route('/')
 def analista():                        
     try:
+        openAnalistaCSV()
         return render_template('analista.html')
     except Exception as e:
         return(str(e))     
