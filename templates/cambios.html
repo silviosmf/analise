@@ -1,0 +1,77 @@
+{% extends "iniciar.html" %}
+{% block content %}
+    <div style="width: 90%;">
+    <canvas id="myChart"></canvas>
+    <script>
+
+          horas = JSON.parse({{horas|tojson}});
+          euro = JSON.parse({{euro|tojson}});
+          gbp = JSON.parse({{gbp|tojson}});
+          cny = JSON.parse({{cny|tojson}});
+          jpy = JSON.parse({{jpy|tojson}});
+          chf = JSON.parse({{chf|tojson}});
+          cad = JSON.parse({{cad|tojson}});
+          dia = JSON.parse({{dia|tojson}});
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: horas,
+                datasets: [{
+                    label: 'Euro - Dia '+dia,
+                    data: euro, 
+                    backgroundColor: ['rgba(30, 96, 163, 0.5)'],                    
+                    borderWidth: 1
+                },
+                {
+                    label: 'Libra Esterlina',
+                    data: gbp, 
+                    backgroundColor: ['rgba(255, 99, 132, 0.5)'],                                       
+                    borderWidth: 1
+                },
+                {
+                    label: 'Yuan Chinês',
+                    data: cny, 
+                    backgroundColor: ['rgba(15, 127, 71, 0.5)'],                    
+                    borderWidth: 1
+                },
+                {
+                    label: 'Iene Japones',
+                    data: jpy, 
+                    backgroundColor: ['rgba(120, 99, 10, 0.5)'],                                       
+                    borderWidth: 1
+                },
+                {
+                    label: 'Franco Suíço',
+                    data: chf, 
+                    backgroundColor: ['rgba(150, 0, 71, 0.5)'],                    
+                    borderWidth: 1
+                },
+                {
+                    label: 'Dólar Canadense',
+                    data: cad, 
+                    backgroundColor: ['rgba(50, 180, 32, 0.5)'],                                       
+                    borderWidth: 1
+                }
+            ]
+            },
+            
+            options: {
+              scales: {
+                  yAxes: [{
+                      ticks: {
+                            max: {{maxima}},
+                            min: {{minima}},
+                            stepSize: 0.1,
+                          beginAtZero: true
+                      }
+                  }]
+              }
+          }
+        });        
+    </script>
+    </div>    
+{% endblock %}
