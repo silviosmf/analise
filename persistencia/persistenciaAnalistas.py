@@ -3,13 +3,30 @@ import os
 from pymongo import MongoClient
 from datetime import datetime, timedelta
 import sys
-sys.path.insert(0,'./controles')
-import controleAnalistas
+sys.path.insert(0,'./')
 from config import Variaveis
 from flask import Flask, jsonify, json
 from flask import render_template
 from pandas import DataFrame
 
+
+#-----------------------
+#Consulta ao Banco
+#-----------------------
+
+def consultarAnalistas():
+    client = MongoClient(Variaveis.caminhodb,Variaveis.portadb)
+    db = client["GCF"]
+    colecao = db["tbl_analista"]  
+    #consulta = {"dia":"24-11-2019", "hora":{"$regex": u"20"}}
+    #print(consulta)    
+    #retorno = colecao.find(consulta).count()
+    retorno = colecao.find()
+    return retorno
+
+
+#consultaPacoteCambio()
+#inserirPacoteCambio()
 
 def testeOpenCSV():
     caminho = os.path.abspath("teste/info.csv")
@@ -25,7 +42,7 @@ def testeOpenCSV():
 def coletarAnalistaCSV():
     colecao = []
     #busca os caminhos dos arquivos que serão coletados dentro da pasta passado no parâmetro
-    arquivos = listarArquivos('persistencia/dados')
+    arquivos = listarArquivos('dados')
     for caminhoArquivo in arquivos:
         data = caminhoArquivo[-12:-10]+"/"+caminhoArquivo[-10:-8]+"/"+caminhoArquivo[-8:-4]
         ficheiro = open(caminhoArquivo, 'r')
@@ -50,27 +67,12 @@ def listarArquivos(caminho):
             #rint(os.path.join(p, arq))
     return lista
 
-def montarLista():
+def salvarDadosMongoDB():
     colecao = coletarAnalistaCSV()
-    df = DataFrame(colecao)
-    return df
- 
-iniciar = Flask(__name__, static_url_path='/static')
+    client = MongoClient(Variaveis.caminhodb,Variaveis.portadb)
+    db = client["GCF"]    
+    db.tbl_analista.insert_many(colecao)
 
-#Analistas
-@iniciar.route('/')
-def analista(): 
-    return controleAnalistas.carregarAnalistas()
-
-@iniciar.route('/analise')
-def analise():                        
-    return controleAnalistas.carregarAnalistaSelecionado()
-
-@iniciar.route('/analistas')
-def analistas():                        
-    return controleAnalistas.carregarAnalistaTodos()
-
-if __name__ == '__main__':
-        iniciar.run(host="localhost", debug=True)
+#salvarDadosMongoDB()
 
 
