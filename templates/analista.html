@@ -1,21 +1,30 @@
 {% extends "iniciar.html" %}
 {% block content %}
-<script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>        
+<script type="text/javaScript">
 function selecaoAnalista() {
     var e = document.getElementById("inlineFormCustomSelect");
-    var itemSelecionado = e.options[e.selectedIndex].value;
-    document.getElementById("retorno").value = e.value;
+    document.getElementById("retorno").value = e.options[e.selectedIndex].value;
+    atualizar()
 }
+function atualizar() {
+            //alert("atualizar")
+            $.getJSON('/selecionarAnalista',
+            function (buscaValor) {
+                $("#valor").text(buscaValor.valor);
+            });                
+         }   
 </script>
 <div class="card">
     <h5 class="card-header">Analista Técnico</h5>
+    <h1 id="valor"></h1>
     <div class="card-body">
         <form>
             <div class="form-row align-items-center">
                 <select onchange="selecaoAnalista()" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
                   <option selected>Escolha o Analista...</option>
                   {% for i in range(lenAnalistas) %}
-                  <option value={{listaNomes[i]}}>{{listaNomes[i]}}</option>
+                  <option value="{{listaNomes[i]}}">{{listaNomes[i]}}</option>
                   {% endfor %}                  
                 </select>
                 <input id="retorno"></input>

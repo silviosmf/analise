@@ -70,6 +70,12 @@ def analise():
 def analistas():                        
     return controleAnalistas.carregarAnalistaTodos()
 
+@iniciar.route('/selecionarAnalista', methods=['GET','POST'])
+def selecionarAnalista():
+    
+    print("Executou........")
+    return jsonify(valor="novo valor")    
+
 if __name__ == '__main__':
         iniciar.run(host="localhost", debug=True)
 

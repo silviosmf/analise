@@ -137,9 +137,6 @@ def carregarAnalistas():
         #print(data)    
         splitData = str(data).split("-");             
         strDatas.append(splitData[2][0:2]+"/"+splitData[1]+"/"+splitData[0])
-    print(strDatas)
-    print(strNome)
-    print(listDeferido)        
     datas = json.dumps(strDatas)
     nome = json.dumps(strNome)
     deferidos = json.dumps(listDeferido)
