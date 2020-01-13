@@ -109,12 +109,37 @@ def carregarAnalistaSelecionado():
         return(str(e))
 
 def carregarAnalistaTodos():
-    strNome = "alert('valor')"
-    nome = json.dumps(strNome)
+    colecao = []
     try:
-        return render_template('analistas.html',strNome=strNome)
+        colecao = persistenciaAnalistas.consultarAnalistas()
     except Exception as e:
+        print("Não conseguiu acessar o Banco de Dados")
         return(str(e))
+
+    df = DataFrame(colecao)
+    strDatas = []
+    #Definir nome para consulta
+    strNome = df.iloc[0].NOME 
+    listDeferido = []
+    # Pegar os deferimentos de nome definido anteriormente
+    listd = df[(strNome == df.NOME)].DEFERIDO.values
+    for item in listd:
+        listDeferido.append(int(item))
+    for data in df.DATA.unique():
+        #print(data)    
+        splitData = str(data).split("-");             
+        strDatas.append(splitData[2][0:2]+"/"+splitData[1]+"/"+splitData[0])
+    datas = json.dumps(strDatas)
+    nome = json.dumps(strNome)
+    deferidos = json.dumps(listDeferido)
+    listaNomes = []
+    for nome in df.NOME.unique():
+        listaNomes.append(nome.title())
+    
+    try:
+        return render_template('analistas.html', listaNomes=listaNomes,lenAnalistas=len(listaNomes))
+    except Exception as e:
+        return(str(e))  
 
 def carregarAnalistas():
     colecao = []

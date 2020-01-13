@@ -68,6 +68,7 @@ def analise():
 
 @iniciar.route('/analistas')
 def analistas():                        
+    #return controleAnalistas.carregarAnalistaTodos()
     return controleAnalistas.carregarAnalistaTodos()
 
 @iniciar.route('/selecionarAnalista', methods=['GET','POST'])
